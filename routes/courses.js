@@ -14,9 +14,18 @@ router.get('/', async (req, res, next)=>{
     res.status(200).json(allCourses);
 });
 
-//return the corresponding course
+//return the corresponding course including any related user data
 router.get('/:id', async (req, res, next)=>{
-    res.status(200).json({message: "Alright..."})
+    const course = await Course.findByPk(
+        req.params.id,
+        {
+        include: [
+          {
+            model: User,
+          },
+        ],
+      });
+    res.status(200).json(course)
 });
 
 //create a new course
