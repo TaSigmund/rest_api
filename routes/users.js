@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {authenticateUser} = require('../auth-user');
+const {User} = require('../models');
+const bcrypt = require('bcrypt');
 
 //return the currently authenticated user
 router.get('/', authenticateUser, (req, res, next)=>{
@@ -8,8 +10,12 @@ router.get('/', authenticateUser, (req, res, next)=>{
 });
 
 //create a new user
-router.post('/', (req, res, next)=>{
-    res.status(201).location('/').end()
+router.post('/', async (req, res, next)=>{
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    req.body.password = hash;
+    const createUser = await User.create(req.body);
+    res.status(201).location('/').end();
 });
 
 module.exports = router;
