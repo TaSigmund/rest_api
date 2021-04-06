@@ -1,5 +1,4 @@
 'use strict';
-
 // load modules
 const express = require('express');
 const morgan = require('morgan');
@@ -8,6 +7,12 @@ const morgan = require('morgan');
 const db = require('./models/index.js')
 const Sequelize = db.Sequelize;
 const sequelize = db.sequelize;
+
+// create the Express app
+const app = express();
+
+//parse incoming requests with JSON
+app.use(express.json());
 
 //test database connection
 (async ()=>{try {
@@ -23,9 +28,6 @@ const coursesRoutes = require('./routes/courses')
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
-
-// create the Express app
-const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
