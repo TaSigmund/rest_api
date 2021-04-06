@@ -11,10 +11,16 @@ router.get('/', authenticateUser, (req, res, next)=>{
 
 //create a new user
 router.post('/', async (req, res, next)=>{
+    
+    //hash password
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     req.body.password = hash;
+
+    //create user
     const createUser = await User.create(req.body);
+
+    //send response
     res.status(201).location('/').end();
 });
 

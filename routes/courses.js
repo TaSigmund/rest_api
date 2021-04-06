@@ -1,9 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const {Course, User} = require('../models');
 
-// return a list of all courses
-router.get('/', (req, res, next)=>{
-    res.status(200).json({message: "Here you go..."})
+// return a list of all courses including any related user data
+router.get('/', async (req, res, next)=>{
+    const allCourses = await Course.findAll({
+        include: [
+          {
+            model: User,
+          },
+        ],
+      });
+    res.status(200).json(allCourses);
 });
 
 //return the corresponding course
