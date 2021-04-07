@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 //return the currently authenticated user
 router.get('/', authenticateUser, (req, res, next)=>{
+    
     res.status(200).json(req.currentUser).end()
 });
 
