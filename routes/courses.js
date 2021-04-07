@@ -30,15 +30,7 @@ router.get('/:id', async (req, res, next)=>{
 
 //create a new course
 router.post('/', async (req, res, next)=>{
-    const user = await User.findByPk(req.body.userId);
-    const currentUser = user.get({ plain: true });
-    console.log(currentUser);
-    const createCourse = await Course.create({
-        title: req.body.title,
-        description: req.body.description,
-        userId: currentUser.id,
-        User: currentUser
-    });
+    const createCourse = await Course.create(req.body)
     res.status(201).json(createCourse);
 });
 
