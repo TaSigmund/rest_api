@@ -38,13 +38,15 @@ router.post('/', async (req, res, next)=>{
 //update the corresponding course
 router.put('/:id', async (req, res, next)=>{
     const courseToUpdate = await Course.findByPk(req.params.id);
-    const updatedCourse = await courseToUpdate.update(req.body);
+    await courseToUpdate.update(req.body);
     res.status(204).end();
 });
 
 //delete the corresponding course
-router.delete('/:id', (req, res, next)=>{
-    res.status(204).json({message: "Alright..."})
+router.delete('/:id', async (req, res, next)=>{
+  const courseToDelete = await Course.findByPk(req.params.id);
+  await courseToDelete.destroy();
+  res.status(204).end();
 });
 
 
