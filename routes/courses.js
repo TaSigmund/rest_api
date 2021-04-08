@@ -30,13 +30,16 @@ router.get('/:id', async (req, res, next)=>{
 
 //create a new course
 router.post('/', async (req, res, next)=>{
-    const createCourse = await Course.create(req.body)
-    res.status(201).json(createCourse);
+    const createCourse = await Course.create(req.body);
+    const lastEntry = await Course.findOne({order: [ [ 'createdAt', 'DESC' ]]});//finds the newest entry in the database
+    res.status(201).location(`/courses/${lastEntry.id}`).json(createCourse); //set status, set location header to a path for the newest course, return json
 });
 
 //update the corresponding course
-router.put('/:id', (req, res, next)=>{
-    res.status(204).json({message: "Alright..."})
+router.put('/:id', async (req, res, next)=>{
+    const courseToUpdate = await Course.findByPk(req.params.id);
+    const updatedCourse = await courseToUpdate.update(req.body);
+    res.status(204).end();
 });
 
 //delete the corresponding course
