@@ -31,16 +31,26 @@ router.get('/:id', async (req, res, next)=>{
 
 //create a new course
 router.post('/', authenticateUser, async (req, res, next)=>{
-    const createCourse = await Course.create(req.body);
-    const lastEntry = await Course.findOne({order: [ [ 'createdAt', 'DESC' ]]});//finds the newest entry in the database
-    res.status(201).location(`/courses/${lastEntry.id}`).json(createCourse); //set status, set location header to a path for the newest course, return json
+    if (!req.body.title || !req.body.description){ //checks for empty strings
+      res.status(400).json({error: 'Please provide a title and a description.'}); //sends an error message back
+    }
+    else{
+      const createCourse = await Course.create(req.body);
+      const lastEntry = await Course.findOne({order: [ [ 'createdAt', 'DESC' ]]});//finds the newest entry in the database
+      res.status(201).location(`/courses/${lastEntry.id}`).json(createCourse); //set status, set location header to a path for the newest course, return json
+    }
 });
 
 //update the corresponding course
 router.put('/:id', authenticateUser, async (req, res, next)=>{
+    if (!req.body.title || !req.body.description){
+      res.status(400).json({error: 'Please provide a title and a description.'});
+    }
+    else {
     const courseToUpdate = await Course.findByPk(req.params.id);
     await courseToUpdate.update(req.body);
     res.status(204).end();
+    }
 });
 
 //delete the corresponding course
