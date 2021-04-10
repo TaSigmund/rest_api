@@ -15,6 +15,9 @@ module.exports = (sequelize) => {
         validate: {
           notNull: {
             msg: "A course title is required"
+          },
+          notEmpty: {
+            msg: "A title is required."
           }
         }
     },
@@ -24,6 +27,9 @@ module.exports = (sequelize) => {
         validate: {
           notNull: {
             msg: "A course description is required"
+          },
+          notEmpty: {
+            msg: "A description is required."
           }
         }
     },

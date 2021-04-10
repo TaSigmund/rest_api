@@ -16,9 +16,6 @@ module.exports = (sequelize) => {
             validate: {
                 notNull: {
                     msg: "A first name is required."
-                },
-                notEmpty: {
-                    msg: "A first name is required."
                 }
             }
         },
@@ -28,9 +25,6 @@ module.exports = (sequelize) => {
             validate: {
                 notNull: {
                     msg: "A last name is required."
-                },
-                notEmpty: {
-                    msg: "A first name is required."
                 }
             }
         },
@@ -44,9 +38,6 @@ module.exports = (sequelize) => {
                 notNull: {
                     msg: "An e-mail address is required."
                 },
-                notEmpty: {
-                    msg: "A first name is required."
-                },
                 isEmail: {
                     msg: "Please enter a valid e-mail address."
                 }
@@ -57,9 +48,6 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: "A password is required."
-                },
-                notEmpty: {
                     msg: "A password is required."
                 }
             }
