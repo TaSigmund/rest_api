@@ -60,21 +60,31 @@ router.post('/', authenticateUser, asyncHandler(async (req, res, next)=>{
 
 //update the corresponding course
 router.put('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
+  const courseToUpdate = await Course.findByPk(req.params.id);
+  if (courseToUpdate){
     if (!req.body.title || !req.body.description){
-      res.status(400).json({error: 'Please provide a title and a description.'});
-    }
+        res.status(400).json({error: 'Please provide a title and a description.'});
+      }
     else {
-    const courseToUpdate = await Course.findByPk(req.params.id);
-    await courseToUpdate.update(req.body);
-    res.status(204).end();
-    }
+      await courseToUpdate.update(req.body);
+      res.status(204).end();
+      }
+  }
+  else{
+    next() //404 for non-existend id
+  }
 }));
 
 //delete the corresponding course
 router.delete('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
   const courseToDelete = await Course.findByPk(req.params.id);
-  await courseToDelete.destroy();
-  res.status(204).end();
+  if (courseToDelete){
+    await courseToDelete.destroy();
+    res.status(204).end();
+  }
+  else{
+    next() //404 for non-existend id
+  }
 }));
 
 
