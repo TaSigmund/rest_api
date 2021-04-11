@@ -1,3 +1,7 @@
+/***
+ * COURSE MODEL
+ ***/
+
 'use strict';
 const {Model, DataTypes} = require('sequelize');
 

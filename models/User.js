@@ -1,3 +1,7 @@
+/***
+ * USER MODEL
+ ***/
+
 'use strict';
 const {Model, DataTypes} = require('sequelize');
 const bcrypt = require('bcrypt');
@@ -16,6 +20,9 @@ module.exports = (sequelize) => {
             validate: {
                 notNull: {
                     msg: "A first name is required."
+                },
+                notEmpty: {
+                    msg: "A first name is required."
                 }
             }
         },
@@ -24,6 +31,9 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
+                    msg: "A last name is required."
+                },
+                notEmpty: {
                     msg: "A last name is required."
                 }
             }
@@ -48,6 +58,9 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
+                    msg: "A password is required."
+                },
+                notEmpty: {
                     msg: "A password is required."
                 }
             }

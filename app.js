@@ -1,3 +1,7 @@
+/***
+ * APPLICATION LOGIC AND SETUP AND DATABASE SETUP
+ ***/
+
 'use strict';
 // load modules
 const express = require('express');
