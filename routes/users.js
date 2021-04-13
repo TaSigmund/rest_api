@@ -9,7 +9,7 @@ const express = require('express');
 const router = express.Router();
 const {authenticateUser} = require('../auth-user');
 const {User} = require('../models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 /***
  * Handler function for routes to avoid repeating try/catch blocks

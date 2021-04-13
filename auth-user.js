@@ -1,7 +1,7 @@
 'use strict';
 const auth = require('basic-auth');
 const {User} = require('./models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Middleware to authenticate the request using Basic Auth.
 exports.authenticateUser = 

@@ -81,7 +81,10 @@ router.post('/', authenticateUser, asyncHandler(async (req, res, next)=>{
 router.put('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
   const courseToUpdate = await Course.findByPk(req.params.id);
   if (courseToUpdate !== null){
-    if (!req.body.title || !req.body.description){
+    if (req.currentUser && req.currentUser.id !== courseToUpdate.userId){ // checks authentication and whether it is the user that owns this course
+        res.status(403).json({error: 'You are not authorized to update these course details'});
+    }
+    else if (!req.body.title || !req.body.description){
         res.status(400).json({error: 'Please provide a title and a description.'});
       }
     else {
@@ -100,8 +103,13 @@ router.put('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
 router.delete('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
   const courseToDelete = await Course.findByPk(req.params.id);
   if (courseToDelete){
+    if (req.currentUser && req.currentUser.id !== courseToDelete.userId){ // checks authentication and whether it is the user that owns this course
+      res.status(403).json({error: 'You are not authorized to delete this course'});
+    }
+    else{
     await courseToDelete.destroy();
     res.status(204).end();
+    }
   }
   else{
     next() //404 for non-existend id
