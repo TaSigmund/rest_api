@@ -60,7 +60,12 @@ router.get('/:id', asyncHandler(async (req, res, next)=>{
           },
         ],
     });
+  if (course){
   res.status(200).json(course)
+  }
+  else {
+    next() // 404 for non-existent id
+  }
 }));
 
 /***
