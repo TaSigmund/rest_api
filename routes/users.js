@@ -23,7 +23,6 @@ function asyncHandler(cb){
             if (error.name === 'SequelizeUniqueConstraintError' || error.name === 'SequelizeValidationError'){//makes sure there is only one account per e-mail address and validation is met
                 error.status = 400;
                 const errors = error.errors.map(err => err.message); //iterates over the errors property of the validation/constraint error
-                console.log(errors);
             }
             next(error) //passes error to global error handler
         }
@@ -48,7 +47,7 @@ router.get('/', authenticateUser, (req, res, next)=>{
  * create a new user
  ***/
 router.post('/', asyncHandler(async(req, res, next)=>{
-        if (req.body.password){
+        if (req.body.password){//if there is a password
             if (req.body.password.length >= 8 && req.body.password.length <= 20){
                 //hash password
                 const salt = bcrypt.genSaltSync(10);
@@ -61,14 +60,18 @@ router.post('/', asyncHandler(async(req, res, next)=>{
                 //send response
                 res.status(201).location('/').end();
                 }
-            else {
-                res.status(400).json({error: 'Your password should be between 8 and 20 letters long.'})
+            else {//if there is a password but it is the wrong length
+                const createUser = await User.create({
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    emailAddress: req.body.emailAddress,
+                    password: "" //so a validation error gets triggered on passwords with the wrong length
+                    });
             }
         }
-        else {
-            //not really to create a user but to trigger validation on all
-            const createUser = await User.create(req.body);
+        else {//if there is no password
+            const createUser = await User.create(req.body); //not really to create a user but to trigger validation on all fields
         }
-    }));
+}));
 
 module.exports = router;

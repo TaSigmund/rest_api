@@ -60,7 +60,7 @@ module.exports = (sequelize) => {
                     msg: "A password is required."
                 },
                 notEmpty: {
-                    msg: "A password is required."
+                    msg: "A password with 8-20 letters is required"
                 }
             }
         } 
