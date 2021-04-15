@@ -18,6 +18,10 @@ function asyncHandler(cb) {
     try {
       await cb(req, res, next);
     } catch (error) {
+        if (error.name === 'SequelizeValidationError'){
+          error.status = 400;
+          const errors = error.errors.map(err => err.message); //iterates over the errors property of the validation error
+        }
       // Forward error to the global error handler
       next(error);
     }
@@ -63,16 +67,11 @@ router.get('/:id', asyncHandler(async (req, res, next)=>{
  * create a new course
  ***/
 router.post('/', authenticateUser, asyncHandler(async (req, res, next)=>{
-  if (!req.body.title || !req.body.description){ //checks for empty strings
-    res.status(400).json({error: 'Please provide a title and a description.'}); //sends an error message back
-  }
-  else{
     const createCourse = await Course.create(req.body);
     const lastEntry = await Course.findOne({ 
       order: [ [ 'createdAt', 'DESC' ]] //finds the newest entry in the database
     });
     res.status(201).location(`/api/courses/${lastEntry.id}`).json(createCourse); //set status, set location header to a path for the newest course, return json
-  }
 }));
 
 /***
@@ -84,16 +83,13 @@ router.put('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
     if (req.currentUser && req.currentUser.id !== courseToUpdate.userId){ // checks authentication and whether it is the user that owns this course
         res.status(403).json({error: 'You are not authorized to update these course details'});
     }
-    else if (!req.body.title || !req.body.description){
-        res.status(400).json({error: 'Please provide a title and a description.'});
-      }
     else {
       await courseToUpdate.update(req.body);
       res.status(204).end();
-      }
+    }
   }
   else{
-    next() //404 for non-existend id
+    next() //404 for non-existent id
   }
 }));
 
@@ -112,7 +108,7 @@ router.delete('/:id', authenticateUser, asyncHandler(async (req, res, next)=>{
     }
   }
   else{
-    next() //404 for non-existend id
+    next() //404 for non-existent id
   }
 }));
 
