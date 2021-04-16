@@ -76,7 +76,7 @@ router.post('/', authenticateUser, asyncHandler(async (req, res, next)=>{
     const lastEntry = await Course.findOne({ 
       order: [ [ 'createdAt', 'DESC' ]] //finds the newest entry in the database
     });
-    res.status(201).location(`/api/courses/${lastEntry.id}`).json(createCourse); //set status, set location header to a path for the newest course, return json
+    res.status(201).location(`/api/courses/${lastEntry.id}`).end(); //sets status and sets location header to a path for the newest course
 }));
 
 /***
